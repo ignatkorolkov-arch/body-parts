@@ -115,12 +115,7 @@
         50%      { transform: translateX(40%); }
     }
 
-    .header {
-        text-align: center;
-        padding: 28px 18px 24px;
-        margin-bottom: 16px;
-        position: relative;
-    }
+    .header { text-align: center; padding: 28px 18px 24px; margin-bottom: 16px; position: relative; }
 
     .header h1 {
         font-size: 26px;
@@ -143,10 +138,8 @@
 
     .theme-btn {
         position: absolute;
-        top: 14px;
-        right: 14px;
-        width: 42px;
-        height: 42px;
+        top: 14px; right: 14px;
+        width: 42px; height: 42px;
         border-radius: 50%;
         background: var(--glass-bg);
         border: 1px solid var(--glass-border);
@@ -163,12 +156,7 @@
 
     .theme-btn:active { transform: scale(0.92); }
 
-    .tabs {
-        display: flex;
-        gap: 4px;
-        padding: 5px;
-        margin-bottom: 16px;
-    }
+    .tabs { display: flex; gap: 4px; padding: 5px; margin-bottom: 16px; }
 
     .tab {
         flex: 1;
@@ -243,8 +231,7 @@
     .listen-instruction { font-size: 13px; color: var(--text-dim); margin-bottom: 22px; position: relative; z-index: 2; }
 
     .big-speaker {
-        width: 130px;
-        height: 130px;
+        width: 130px; height: 130px;
         border-radius: 50%;
         background: var(--glass-bg);
         border: 1px solid var(--glass-border);
@@ -472,20 +459,57 @@
     let englishVoice = null;
     let russianVoice = null;
 
+    // === АНГЛИЙСКИЙ ГОЛОС — приоритет как в Chrome ===
     function pickEnglishVoice() {
         const voices = window.speechSynthesis.getVoices();
         if (!voices.length) return null;
-        const priority = ['Google US English', 'Samantha', 'Microsoft Zira', 'Microsoft Aria', 'Alex', 'Daniel', 'Karen'];
+
+        const priority = [
+            'Google US English',
+            'Google UK English Female',
+            'Google UK English Male',
+            'Microsoft Aria',
+            'Microsoft Jenny',
+            'Microsoft Zira',
+            'Samantha',
+            'Karen',
+            'Daniel',
+            'Alex'
+        ];
+
         for (const name of priority) {
             const v = voices.find(voice => voice.name.includes(name));
             if (v) return v;
         }
-        return voices.find(v => v.lang === 'en-US') || voices.find(v => v.lang === 'en-GB') || voices.find(v => v.lang.toLowerCase().startsWith('en'));
+
+        return voices.find(v => v.lang === 'en-US')
+            || voices.find(v => v.lang === 'en-GB')
+            || voices.find(v => v.lang.toLowerCase().startsWith('en'));
     }
 
+    // === РУССКИЙ ГОЛОС — приоритет как в Chrome ===
     function pickRussianVoice() {
         const voices = window.speechSynthesis.getVoices();
-        return voices.find(v => v.lang === 'ru-RU') || voices.find(v => v.lang.startsWith('ru'));
+        if (!voices.length) return null;
+
+        const priority = [
+            'Google русский',
+            'Google Russian',
+            'Microsoft Svetlana',
+            'Microsoft Daria',
+            'Microsoft Irina',
+            'Milena',
+            'Yuri',
+            'Katya'
+        ];
+
+        for (const name of priority) {
+            const v = voices.find(voice => voice.name.includes(name));
+            if (v) return v;
+        }
+
+        return voices.find(v => v.lang === 'ru-RU')
+            || voices.find(v => v.lang.startsWith('ru'));
     }
 
     function loadVoices() {
@@ -493,6 +517,14 @@
         if (!voices.length) return;
         englishVoice = pickEnglishVoice();
         russianVoice = pickRussianVoice();
+
+        // Лог для проверки
+        console.log('=== ДОСТУПНЫЕ ГОЛОСА ===');
+        voices.forEach(v => console.log(v.name, v.lang));
+        console.log('=== ВЫБРАНО ===');
+        console.log('English:', englishVoice ? englishVoice.name : '—');
+        console.log('Russian:', russianVoice ? russianVoice.name : '—');
+
         const w = document.getElementById('voiceWarning');
         if (!englishVoice) w.classList.add('show');
         else w.classList.remove('show');
@@ -503,12 +535,11 @@
         window.speechSynthesis.onvoiceschanged = loadVoices;
     }
 
-    // === ОЗВУЧКА: английский + русский ===
+    // === ОЗВУЧКА ===
     function speak(text, textRu) {
         if (!('speechSynthesis' in window)) return;
         window.speechSynthesis.cancel();
 
-        // Английское слово
         if (!englishVoice) englishVoice = pickEnglishVoice();
         const uEn = new SpeechSynthesisUtterance(text);
         uEn.lang = 'en-US';
@@ -516,10 +547,8 @@
         uEn.pitch = 1.0;
         uEn.volume = 1.0;
         if (englishVoice) uEn.voice = englishVoice;
-
         window.speechSynthesis.speak(uEn);
 
-        // Русский перевод — через 1.5 секунды
         if (textRu) {
             if (!russianVoice) russianVoice = pickRussianVoice();
             const uRu = new SpeechSynthesisUtterance(textRu);
@@ -528,10 +557,7 @@
             uRu.pitch = 1.0;
             uRu.volume = 1.0;
             if (russianVoice) uRu.voice = russianVoice;
-
-            setTimeout(() => {
-                window.speechSynthesis.speak(uRu);
-            }, 1500);
+            setTimeout(() => window.speechSynthesis.speak(uRu), 1500);
         }
     }
 
@@ -602,7 +628,7 @@
         if (!current) return;
         const sp = document.getElementById('bigSpeaker');
         sp.classList.add('playing');
-        speak(current.en, current.ru);
+        speak(current.en);
         setTimeout(() => sp.classList.remove('playing'), 1500);
     }
 
@@ -633,7 +659,7 @@
     }
 
     function speakWord() {
-        if (trCurrent) speak(trCurrent.en, trCurrent.ru);
+        if (trCurrent) speak(trCurrent.en);
     }
 
     function checkTr() {
@@ -641,12 +667,12 @@
         const res = document.getElementById('trResult');
         const correct = trCurrent.ru.toLowerCase();
         if (inp === correct || (correct.includes(inp) && inp.length > 2)) {
-            res.textContent = '✓ Верно! ' + trCurrent.en + ' — ' + trCurrent.ru;
+            res.textContent = '✓ Верно!';
             res.className = 'translate-result correct';
-            speak(trCurrent.en, trCurrent.ru);
+            speak(trCurrent.en);
             setTimeout(newTranslate, 1800);
         } else {
-            res.textContent = '✗ Правильно: ' + trCurrent.ru;
+            res.textContent = '✗ Попробуй ещё';
             res.className = 'translate-result wrong';
         }
     }
