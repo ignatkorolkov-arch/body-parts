@@ -363,7 +363,7 @@
     </div>
 
     <div class="voice-warning glass" id="voiceWarning">
-        ⚠️ Нет английского голоса. Установи English (US) в настройках системы.
+        ⚠️ Нет английского или русского голоса. Проверь настройки системы.
     </div>
 
     <div class="tabs glass">
@@ -459,80 +459,70 @@
     let englishVoice = null;
     let russianVoice = null;
 
-    // === АНГЛИЙСКИЙ ГОЛОС — приоритет как в Chrome ===
+    // === ВЫБОР ГОЛОСОВ ===
     function pickEnglishVoice() {
         const voices = window.speechSynthesis.getVoices();
         if (!voices.length) return null;
 
-        const priority = [
-            'Google US English',
-            'Google UK English Female',
-            'Google UK English Male',
-            'Microsoft Aria',
-            'Microsoft Jenny',
-            'Microsoft Zira',
-            'Samantha',
-            'Karen',
-            'Daniel',
-            'Alex'
-        ];
+        // Жёстко ищем Google в первую очередь
+        let v = voices.find(x => x.name === 'Google US English');
+        if (v) return v;
+        v = voices.find(x => x.name.includes('Google') && x.lang === 'en-US');
+        if (v) return v;
 
+        const priority = ['Google UK English Female', 'Microsoft Aria', 'Microsoft Jenny', 'Microsoft Zira', 'Samantha', 'Karen', 'Daniel', 'Alex'];
         for (const name of priority) {
-            const v = voices.find(voice => voice.name.includes(name));
+            v = voices.find(x => x.name.includes(name));
             if (v) return v;
         }
 
-        return voices.find(v => v.lang === 'en-US')
-            || voices.find(v => v.lang === 'en-GB')
-            || voices.find(v => v.lang.toLowerCase().startsWith('en'));
+        return voices.find(x => x.lang === 'en-US') || voices.find(x => x.lang.startsWith('en'));
     }
 
-    // === РУССКИЙ ГОЛОС — приоритет как в Chrome ===
     function pickRussianVoice() {
         const voices = window.speechSynthesis.getVoices();
         if (!voices.length) return null;
 
-        const priority = [
-            'Google русский',
-            'Google Russian',
-            'Microsoft Svetlana',
-            'Microsoft Daria',
-            'Microsoft Irina',
-            'Milena',
-            'Yuri',
-            'Katya'
-        ];
+        // Жёстко ищем Google русский
+        let v = voices.find(x => x.name === 'Google русский');
+        if (v) return v;
+        v = voices.find(x => x.name.includes('Google') && x.lang === 'ru-RU');
+        if (v) return v;
 
+        const priority = ['Microsoft Svetlana', 'Microsoft Daria', 'Microsoft Irina', 'Milena', 'Yuri', 'Katya'];
         for (const name of priority) {
-            const v = voices.find(voice => voice.name.includes(name));
+            v = voices.find(x => x.name.includes(name));
             if (v) return v;
         }
 
-        return voices.find(v => v.lang === 'ru-RU')
-            || voices.find(v => v.lang.startsWith('ru'));
+        return voices.find(x => x.lang === 'ru-RU') || voices.find(x => x.lang.startsWith('ru'));
     }
 
     function loadVoices() {
         const voices = window.speechSynthesis.getVoices();
         if (!voices.length) return;
+
         englishVoice = pickEnglishVoice();
         russianVoice = pickRussianVoice();
 
-        // Лог для проверки
-        console.log('=== ДОСТУПНЫЕ ГОЛОСА ===');
-        voices.forEach(v => console.log(v.name, v.lang));
-        console.log('=== ВЫБРАНО ===');
-        console.log('English:', englishVoice ? englishVoice.name : '—');
-        console.log('Russian:', russianVoice ? russianVoice.name : '—');
+        // Вывод в консоль — для проверки
+        console.log('═══ ВСЕ ГОЛОСА ═══');
+        voices.forEach(v => console.log(v.name, '|', v.lang));
+        console.log('═══ ВЫБРАНО ═══');
+        console.log('EN →', englishVoice ? englishVoice.name + ' (' + englishVoice.lang + ')' : 'нет');
+        console.log('RU →', russianVoice ? russianVoice.name + ' (' + russianVoice.lang + ')' : 'нет');
 
         const w = document.getElementById('voiceWarning');
-        if (!englishVoice) w.classList.add('show');
+        if (!englishVoice || !russianVoice) w.classList.add('show');
         else w.classList.remove('show');
     }
 
     if ('speechSynthesis' in window) {
         loadVoices();
         window.speechSynthesis.onvoiceschanged = loadVoices;
+        // Иногда Chrome грузит голоса асинхронно
+        setTimeout(loadVoices, 500);
+        setTimeout(loadVoices, 1500);
     }
 
     // === ОЗВУЧКА ===
@@ -682,8 +672,6 @@
     });
 
     buildList();
-    setTimeout(loadVoices, 500);
-    setTimeout(loadVoices, 1500);
 </script>
 
 </body>
