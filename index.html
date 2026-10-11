@@ -9,156 +9,107 @@
     * { scrollbar-width: none; -ms-overflow-style: none; -webkit-tap-highlight-color: transparent; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    :root {
+        --bg-main: #000;
+        --bg-blob1: rgba(120, 130, 180, 0.35);
+        --bg-blob2: rgba(180, 130, 150, 0.25);
+        --bg-blob3: rgba(140, 160, 200, 0.25);
+        --text-main: #fff;
+        --text-dim: rgba(255, 255, 255, 0.5);
+        --text-soft: rgba(255, 255, 255, 0.35);
+        --glass-bg: rgba(255, 255, 255, 0.06);
+        --glass-bg-hover: rgba(255, 255, 255, 0.1);
+        --glass-border: rgba(255, 255, 255, 0.12);
+        --glass-border-hover: rgba(255, 255, 255, 0.22);
+        --glass-inset: rgba(255, 255, 255, 0.18);
+        --glass-inset-hover: rgba(255, 255, 255, 0.3);
+        --shadow: rgba(0, 0, 0, 0.5);
+        --accent: #fff;
+        --accent-text: #000;
+        --glow: rgba(255, 255, 255, 0.08);
+    }
+
+    body.light {
+        --bg-main: #f7f1e6;
+        --bg-blob1: rgba(220, 200, 170, 0.5);
+        --bg-blob2: rgba(240, 220, 190, 0.45);
+        --bg-blob3: rgba(200, 190, 170, 0.4);
+        --text-main: #4a3f2f;
+        --text-dim: rgba(74, 63, 47, 0.6);
+        --text-soft: rgba(74, 63, 47, 0.4);
+        --glass-bg: rgba(255, 255, 255, 0.55);
+        --glass-bg-hover: rgba(255, 255, 255, 0.7);
+        --glass-border: rgba(160, 140, 110, 0.2);
+        --glass-border-hover: rgba(160, 140, 110, 0.35);
+        --glass-inset: rgba(255, 255, 255, 0.8);
+        --glass-inset-hover: rgba(255, 255, 255, 0.95);
+        --shadow: rgba(160, 140, 110, 0.2);
+        --accent: #4a3f2f;
+        --accent-text: #f7f1e6;
+        --glow: rgba(160, 140, 110, 0.1);
+    }
+
     body {
         font-family: -apple-system, 'SF Pro Display', 'Segoe UI', sans-serif;
-        background: #0a0a0c;
-        color: #fff;
+        background: var(--bg-main);
+        color: var(--text-main);
         min-height: 100vh;
         overflow-x: hidden;
         position: relative;
-        cursor: crosshair;
+        transition: background 0.5s ease, color 0.5s ease;
     }
 
-    /* === Размытый светлый фон === */
-    .bg-layer {
-        position: fixed;
-        inset: -15%;
-        z-index: 0;
-        pointer-events: none;
-        filter: blur(70px);
-        opacity: 0.7;
-    }
-
-    .bg-blob {
-        position: absolute;
-        border-radius: 50%;
-        mix-blend-mode: screen;
-        animation: moveBg 30s ease-in-out infinite;
-    }
-
-    .bg-blob.b1 {
-        width: 55vw; height: 55vw;
-        top: -10%; left: -10%;
-        background: radial-gradient(circle, rgba(120, 130, 180, 0.5) 0%, transparent 70%);
-    }
-
-    .bg-blob.b2 {
-        width: 50vw; height: 50vw;
-        bottom: -15%; right: -10%;
-        background: radial-gradient(circle, rgba(180, 130, 150, 0.35) 0%, transparent 70%);
-        animation-delay: -10s;
-    }
-
-    .bg-blob.b3 {
-        width: 45vw; height: 45vw;
-        top: 30%; left: 40%;
-        background: radial-gradient(circle, rgba(140, 160, 200, 0.35) 0%, transparent 70%);
-        animation-delay: -20s;
-    }
-
-    @keyframes moveBg {
-        0%, 100% { transform: translate(0, 0) scale(1); }
-        33%      { transform: translate(4%, -3%) scale(1.1); }
-        66%      { transform: translate(-3%, 4%) scale(0.95); }
-    }
-
-    /* Тонкие линии фона */
-    .bg-lines {
-        position: fixed;
-        inset: 0;
-        z-index: 0;
-        background-image: linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-        background-size: 100% 80px;
-        mask-image: radial-gradient(ellipse at center, #000 40%, transparent 80%);
-        -webkit-mask-image: radial-gradient(ellipse at center, #000 40%, transparent 80%);
-        pointer-events: none;
-    }
-
-    /* === Линза под курсором === */
-    .cursor-lens {
-        position: fixed;
-        width: 400px;
-        height: 400px;
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 5;
-        transform: translate(-50%, -50%);
-        background: radial-gradient(
-            circle,
-            rgba(255, 255, 255, 0.14) 0%,
-            rgba(255, 255, 255, 0.06) 30%,
-            transparent 70%
-        );
-        backdrop-filter: blur(8px) saturate(140%);
-        -webkit-backdrop-filter: blur(8px) saturate(140%);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        mix-blend-mode: screen;
-    }
-
-    body:hover .cursor-lens {
-        opacity: 1;
-    }
-
-    /* Второй слой — свечение */
-    .cursor-lens::after {
+    body::before {
         content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: 50%;
-        background: radial-gradient(
-            circle,
-            rgba(255, 255, 255, 0.05) 0%,
-            transparent 60%
-        );
+        position: fixed;
+        inset: -20%;
+        background:
+            radial-gradient(circle at 20% 20%, var(--bg-blob1) 0%, transparent 45%),
+            radial-gradient(circle at 80% 70%, var(--bg-blob2) 0%, transparent 45%),
+            radial-gradient(circle at 50% 90%, var(--bg-blob3) 0%, transparent 45%);
+        filter: blur(70px);
+        opacity: 0.8;
+        animation: floatBg 30s ease-in-out infinite;
+        z-index: 0;
+        pointer-events: none;
+        transition: background 0.5s ease;
     }
 
-    /* === Приложение === */
+    @keyframes floatBg {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        33%      { transform: translate(3%, -2%) scale(1.05); }
+        66%      { transform: translate(-2%, 3%) scale(0.97); }
+    }
+
     .app {
         position: relative;
-        z-index: 10;
+        z-index: 1;
         max-width: 700px;
         margin: 0 auto;
         padding: 20px 16px 40px;
     }
 
-    /* === Жидкое стекло === */
     .glass {
-        background: linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.14) 0%,
-            rgba(255, 255, 255, 0.06) 50%,
-            rgba(255, 255, 255, 0.1) 100%
-        );
-        backdrop-filter: blur(24px) saturate(200%) brightness(1.1);
-        -webkit-backdrop-filter: blur(24px) saturate(200%) brightness(1.1);
-        border: 1px solid rgba(255, 255, 255, 0.22);
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px) saturate(140%);
+        -webkit-backdrop-filter: blur(20px) saturate(140%);
+        border: 1px solid var(--glass-border);
         border-radius: 24px;
         box-shadow:
-            0 8px 32px rgba(0, 0, 0, 0.5),
-            0 1px 0 rgba(255, 255, 255, 0.4) inset,
-            0 -1px 0 rgba(255, 255, 255, 0.08) inset,
-            0 0 40px rgba(255, 255, 255, 0.05);
+            0 8px 32px var(--shadow),
+            inset 0 1px 0 var(--glass-inset);
         position: relative;
         overflow: hidden;
-        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+        transition: all 0.5s ease;
     }
 
-    /* Блик на стекле */
     .glass::before {
         content: "";
         position: absolute;
         top: 0; left: -50%;
         width: 200%; height: 100%;
-        background: linear-gradient(
-            115deg,
-            transparent 35%,
-            rgba(255, 255, 255, 0.25) 45%,
-            rgba(255, 255, 255, 0.35) 50%,
-            rgba(255, 255, 255, 0.25) 55%,
-            transparent 65%
-        );
-        animation: shine 5s ease-in-out infinite;
+        background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.12) 50%, transparent 60%);
+        animation: shine 6s ease-in-out infinite;
         pointer-events: none;
     }
 
@@ -167,51 +118,65 @@
         50%      { transform: translateX(40%); }
     }
 
-    /* Капли на стекле */
-    .glass::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background-image:
-            radial-gradient(circle at 15% 30%, rgba(255,255,255,0.12) 0px, transparent 3px),
-            radial-gradient(circle at 70% 60%, rgba(255,255,255,0.09) 0px, transparent 2px),
-            radial-gradient(circle at 45% 80%, rgba(255,255,255,0.11) 0px, transparent 3px),
-            radial-gradient(circle at 85% 20%, rgba(255,255,255,0.08) 0px, transparent 2px);
-        pointer-events: none;
-        border-radius: 24px;
-    }
-
-    /* Заголовок */
     .header {
         text-align: center;
-        padding: 32px 20px;
+        padding: 28px 18px 24px;
         margin-bottom: 16px;
+        position: relative;
     }
 
     .header h1 {
-        font-size: 28px;
+        font-size: 26px;
         font-weight: 700;
-        color: #fff;
+        color: var(--text-main);
         letter-spacing: -0.5px;
         position: relative;
         z-index: 2;
-        text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+        transition: color 0.5s ease;
     }
 
     .header p {
-        font-size: 12px;
-        color: rgba(255, 255, 255, 0.5);
-        margin-top: 8px;
+        font-size: 11px;
+        color: var(--text-dim);
+        margin-top: 6px;
         letter-spacing: 3px;
         text-transform: uppercase;
         position: relative;
         z-index: 2;
+        transition: color 0.5s ease;
     }
 
-    /* Табы */
+    .theme-btn {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        color: var(--text-main);
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 3;
+        box-shadow:
+            inset 0 1px 0 var(--glass-inset),
+            0 4px 12px var(--shadow);
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .theme-btn:active {
+        transform: scale(0.92);
+    }
+
     .tabs {
         display: flex;
-        gap: 6px;
+        gap: 4px;
         padding: 5px;
         margin-bottom: 16px;
     }
@@ -223,7 +188,7 @@
         padding: 13px 6px;
         font-size: 12.5px;
         font-weight: 600;
-        color: rgba(255, 255, 255, 0.5);
+        color: var(--text-dim);
         cursor: pointer;
         font-family: inherit;
         border-radius: 18px;
@@ -233,96 +198,64 @@
     }
 
     .tab.active {
-        background: rgba(255, 255, 255, 0.15);
-        color: #fff;
+        background: var(--glass-bg-hover);
+        color: var(--text-main);
         box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, 0.3),
-            0 4px 16px rgba(0, 0, 0, 0.3);
+            inset 0 1px 0 var(--glass-inset-hover),
+            0 4px 16px var(--shadow);
     }
 
     .mode { display: none; }
     .mode.active { display: block; }
 
-    /* Поиск */
-    .search-wrap {
-        padding: 8px;
-    }
+    .search-wrap { padding: 8px; }
 
     .search-box {
         width: 100%;
         padding: 14px 18px;
         font-size: 15px;
         font-family: inherit;
-        background: rgba(0, 0, 0, 0.25);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
         border-radius: 18px;
-        color: #fff;
+        color: var(--text-main);
         outline: none;
         transition: all 0.3s ease;
         position: relative;
         z-index: 2;
     }
 
-    .search-box::placeholder { color: rgba(255, 255, 255, 0.4); }
+    .search-box::placeholder { color: var(--text-soft); }
 
     .search-box:focus {
-        border-color: rgba(255, 255, 255, 0.3);
-        background: rgba(0, 0, 0, 0.35);
-        box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.06);
+        border-color: var(--glass-border-hover);
+        background: var(--glass-bg-hover);
+        box-shadow: 0 0 0 4px var(--glow);
     }
 
-    /* Слова */
     .word-item {
         display: flex;
         align-items: center;
         gap: 12px;
-        padding: 16px 20px;
-        background: linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.12) 0%,
-            rgba(255, 255, 255, 0.05) 100%
-        );
-        backdrop-filter: blur(20px) saturate(180%);
-        -webkit-backdrop-filter: blur(20px) saturate(180%);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 20px;
-        margin-bottom: 10px;
+        padding: 15px 18px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px) saturate(140%);
+        -webkit-backdrop-filter: blur(20px) saturate(140%);
+        border: 1px solid var(--glass-border);
+        border-radius: 18px;
+        margin-bottom: 8px;
         cursor: pointer;
         transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        position: relative;
-        overflow: hidden;
         box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, 0.2),
-            0 4px 16px rgba(0, 0, 0, 0.3);
-    }
-
-    .word-item::before {
-        content: "";
-        position: absolute;
-        top: 0; left: -50%;
-        width: 200%; height: 100%;
-        background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.15) 50%, transparent 60%);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-
-    .word-item:hover::before {
-        opacity: 1;
-        animation: shine 2s ease-in-out infinite;
+            inset 0 1px 0 var(--glass-inset),
+            0 4px 16px var(--shadow);
     }
 
     .word-item:active,
     .word-item.playing {
-        background: linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.2) 0%,
-            rgba(255, 255, 255, 0.1) 100%
-        );
+        background: var(--glass-bg-hover);
         transform: scale(0.98);
-        border-color: rgba(255, 255, 255, 0.3);
-        box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, 0.35),
-            0 0 40px rgba(255, 255, 255, 0.15);
+        border-color: var(--glass-border-hover);
     }
 
     .word-info { flex: 1; min-width: 0; position: relative; z-index: 2; }
@@ -330,51 +263,37 @@
     .word-en {
         font-size: 17px;
         font-weight: 700;
-        color: #fff;
+        color: var(--text-main);
         margin-bottom: 4px;
     }
 
     .word-tr {
         font-size: 12.5px;
-        color: rgba(255, 255, 255, 0.6);
+        color: var(--text-dim);
         font-weight: 500;
         margin-bottom: 2px;
     }
 
     .word-ru {
         font-size: 13.5px;
-        color: rgba(255, 255, 255, 0.45);
+        color: var(--text-soft);
     }
 
     .play-icon {
         font-size: 18px;
         flex-shrink: 0;
         opacity: 0.6;
-        position: relative;
-        z-index: 2;
     }
 
-    .word-item.playing .play-icon {
-        opacity: 1;
-        animation: pulse 0.6s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50%      { transform: scale(1.2); }
-    }
-
-    /* Аудирование */
     .listen-block {
         text-align: center;
-        padding: 36px 20px;
+        padding: 32px 20px;
     }
 
     .listen-instruction {
         font-size: 13px;
-        color: rgba(255, 255, 255, 0.6);
+        color: var(--text-dim);
         margin-bottom: 22px;
-        letter-spacing: 0.5px;
         position: relative;
         z-index: 2;
     }
@@ -383,71 +302,30 @@
         width: 130px;
         height: 130px;
         border-radius: 50%;
-        background: linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.18) 0%,
-            rgba(255, 255, 255, 0.08) 100%
-        );
-        backdrop-filter: blur(24px) saturate(180%);
-        -webkit-backdrop-filter: blur(24px) saturate(180%);
-        border: 1px solid rgba(255, 255, 255, 0.25);
-        color: #fff;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px) saturate(140%);
+        border: 1px solid var(--glass-border);
+        color: var(--text-main);
         font-size: 50px;
         cursor: pointer;
         box-shadow:
-            inset 0 2px 0 rgba(255, 255, 255, 0.3),
-            0 12px 40px rgba(0, 0, 0, 0.5),
-            0 0 60px rgba(255, 255, 255, 0.1);
+            inset 0 1px 0 var(--glass-inset),
+            0 12px 40px var(--shadow);
         transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         position: relative;
         z-index: 2;
     }
 
-    .big-speaker::after {
-        content: "";
-        position: absolute;
-        inset: -14px;
-        border-radius: 50%;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        animation: ripple 3s ease-out infinite;
-        pointer-events: none;
-    }
-
-    @keyframes ripple {
-        0% { transform: scale(0.9); opacity: 1; }
-        100% { transform: scale(1.4); opacity: 0; }
-    }
-
-    .big-speaker:active {
-        transform: scale(0.95);
-        background: linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.25) 0%,
-            rgba(255, 255, 255, 0.15) 100%
-        );
-    }
-
-    .big-speaker.playing {
-        background: linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.3) 0%,
-            rgba(255, 255, 255, 0.15) 100%
-        );
-        box-shadow:
-            inset 0 2px 0 rgba(255, 255, 255, 0.5),
-            0 0 80px rgba(255, 255, 255, 0.3);
-    }
+    .big-speaker:active { transform: scale(0.95); }
 
     .replay-hint {
         font-size: 11px;
-        color: rgba(255, 255, 255, 0.35);
+        color: var(--text-soft);
         margin-top: 18px;
-        letter-spacing: 0.5px;
         position: relative;
         z-index: 2;
     }
 
-    /* Опции */
     .options {
         display: flex;
         flex-direction: column;
@@ -455,114 +333,60 @@
     }
 
     .option {
-        background: linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.1) 0%,
-            rgba(255, 255, 255, 0.04) 100%
-        );
-        backdrop-filter: blur(20px) saturate(180%);
-        -webkit-backdrop-filter: blur(20px) saturate(180%);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 20px;
-        padding: 18px 22px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        border-radius: 18px;
+        padding: 17px 22px;
         text-align: left;
         cursor: pointer;
-        color: #fff;
+        color: var(--text-main);
         font-family: inherit;
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, 0.2),
-            0 4px 16px rgba(0, 0, 0, 0.3);
-        position: relative;
-        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: inset 0 1px 0 var(--glass-inset);
     }
 
-    .option:active {
-        background: linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.18) 0%,
-            rgba(255, 255, 255, 0.08) 100%
-        );
-        transform: scale(0.98);
-        border-color: rgba(255, 255, 255, 0.3);
-    }
+    .option:active { background: var(--glass-bg-hover); transform: scale(0.98); }
 
-    .option .opt-en {
-        font-size: 15px;
-        font-weight: 700;
-        margin-bottom: 4px;
-        position: relative;
-        z-index: 2;
-    }
-
-    .option .opt-ru {
-        font-size: 12.5px;
-        color: rgba(255, 255, 255, 0.5);
-        position: relative;
-        z-index: 2;
-    }
+    .opt-en { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .opt-ru { font-size: 12.5px; color: var(--text-dim); }
 
     .option.correct {
-        background: linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.25) 0%,
-            rgba(255, 255, 255, 0.12) 100%
-        );
-        border-color: rgba(255, 255, 255, 0.4);
-        box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, 0.5),
-            0 0 60px rgba(255, 255, 255, 0.2);
+        background: var(--glass-bg-hover);
+        border-color: var(--glass-border-hover);
     }
 
-    .option.wrong {
-        background: rgba(255, 255, 255, 0.03);
-        border-color: rgba(255, 255, 255, 0.08);
-        opacity: 0.4;
-        animation: shake 0.5s ease;
-    }
+    .option.wrong { opacity: 0.4; }
 
-    @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        25%      { transform: translateX(-6px); }
-        75%      { transform: translateX(6px); }
-    }
-
-    /* Статистика */
     .stats {
         display: flex;
         justify-content: space-around;
-        padding: 18px;
-        margin-top: 14px;
+        padding: 16px;
+        margin-top: 12px;
     }
 
-    .stat-box { text-align: center; position: relative; z-index: 2; }
+    .stat-box { text-align: center; }
 
     .stat-label {
         font-size: 10px;
-        color: rgba(255, 255, 255, 0.45);
+        color: var(--text-soft);
         text-transform: uppercase;
         letter-spacing: 1.5px;
         font-weight: 600;
         margin-bottom: 6px;
     }
 
-    .stat-num {
-        font-size: 24px;
-        font-weight: 800;
-        color: #fff;
-        text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-    }
+    .stat-num { font-size: 22px; font-weight: 800; color: var(--text-main); }
 
-    /* Перевод */
     .translate-block {
         text-align: center;
-        padding: 30px 22px;
+        padding: 28px 22px;
     }
 
     .translate-label {
-        font-size: 12px;
-        color: rgba(255, 255, 255, 0.45);
-        margin-bottom: 14px;
+        font-size: 11px;
+        color: var(--text-soft);
+        margin-bottom: 12px;
         letter-spacing: 2px;
         text-transform: uppercase;
         position: relative;
@@ -570,147 +394,109 @@
     }
 
     .translate-word {
-        font-size: 38px;
+        font-size: 36px;
         font-weight: 800;
-        color: #fff;
-        margin-bottom: 22px;
+        color: var(--text-main);
+        margin-bottom: 20px;
         position: relative;
         z-index: 2;
-        letter-spacing: -0.5px;
-        text-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
     }
 
     .translate-input {
         width: 100%;
-        padding: 16px 20px;
+        padding: 15px 20px;
         font-size: 16px;
         font-family: inherit;
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
         border-radius: 18px;
-        color: #fff;
+        color: var(--text-main);
         outline: none;
-        margin-bottom: 12px;
-        transition: all 0.3s ease;
+        margin-bottom: 10px;
         position: relative;
         z-index: 2;
     }
 
-    .translate-input::placeholder { color: rgba(255, 255, 255, 0.4); }
-
-    .translate-input:focus {
-        border-color: rgba(255, 255, 255, 0.3);
-        background: rgba(0, 0, 0, 0.4);
-        box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.08);
-    }
+    .translate-input::placeholder { color: var(--text-soft); }
 
     .btn-check {
         width: 100%;
-        padding: 16px;
+        padding: 15px;
         font-size: 15px;
         font-weight: 700;
-        color: #000;
-        background: rgba(255, 255, 255, 0.95);
-        border: 1px solid rgba(255, 255, 255, 0.5);
+        color: var(--accent-text);
+        background: var(--accent);
+        border: 1px solid var(--glass-border);
         border-radius: 18px;
         cursor: pointer;
         font-family: inherit;
-        box-shadow:
-            0 8px 30px rgba(255, 255, 255, 0.2),
-            inset 0 1px 0 rgba(255, 255, 255, 1);
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 8px 25px var(--shadow);
+        transition: all 0.3s ease;
         position: relative;
         z-index: 2;
     }
 
-    .btn-check:active {
-        transform: scale(0.97);
-        background: rgba(255, 255, 255, 0.85);
-    }
+    .btn-check:active { transform: scale(0.97); }
 
     .translate-result {
         font-size: 14px;
-        margin-top: 18px;
+        margin-top: 16px;
         min-height: 22px;
         font-weight: 600;
-        color: rgba(255, 255, 255, 0.8);
-        position: relative;
-        z-index: 2;
+        color: var(--text-dim);
     }
 
-    .translate-result.correct { color: #fff; }
-    .translate-result.wrong { color: rgba(255, 255, 255, 0.6); }
+    .translate-result.correct { color: var(--text-main); }
+    .translate-result.wrong { color: var(--text-soft); }
 
     .speak-word-btn {
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 16px;
-        padding: 11px 20px;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 14px;
+        padding: 10px 18px;
         font-size: 15px;
         cursor: pointer;
-        color: #fff;
+        color: var(--text-main);
         font-family: inherit;
-        margin-bottom: 16px;
-        transition: all 0.3s ease;
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        margin-bottom: 14px;
         position: relative;
         z-index: 2;
-    }
-
-    .speak-word-btn:active {
-        background: rgba(255, 255, 255, 0.15);
-        transform: scale(0.97);
     }
 
     .voice-warning {
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 16px;
-        padding: 14px 18px;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 14px;
+        padding: 13px 18px;
         font-size: 13px;
-        color: rgba(255, 255, 255, 0.75);
-        margin-bottom: 14px;
-        line-height: 1.5;
+        color: var(--text-dim);
+        margin-bottom: 12px;
         display: none;
-        backdrop-filter: blur(20px);
     }
 
     .voice-warning.show { display: block; }
 
     @media (max-width: 480px) {
         .app { padding: 14px 12px 30px; }
-        .header { padding: 26px 18px; }
-        .header h1 { font-size: 24px; }
-        .tab { font-size: 11.5px; padding: 12px 4px; }
+        .header { padding: 24px 16px 20px; }
+        .header h1 { font-size: 22px; }
+        .theme-btn { width: 38px; height: 38px; font-size: 18px; top: 12px; right: 12px; }
+        .tab { font-size: 11.5px; padding: 11px 3px; }
         .big-speaker { width: 110px; height: 110px; font-size: 44px; }
         .translate-word { font-size: 30px; }
-        .word-en { font-size: 16px; }
-        .stat-num { font-size: 20px; }
-        .cursor-lens { display: none; } /* на телефоне линза не нужна */
     }
 </style>
 </head>
 <body>
 
-<!-- Фоновые пятна (приглушённые) -->
-<div class="bg-layer">
-    <div class="bg-blob b1"></div>
-    <div class="bg-blob b2"></div>
-    <div class="bg-blob b3"></div>
-</div>
-<div class="bg-lines"></div>
-
-<!-- Линза под курсором -->
-<div class="cursor-lens" id="cursorLens"></div>
-
 <div class="app">
     <div class="header glass">
+        <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Сменить тему">🌙</button>
         <h1>Части тела</h1>
         <p>English · pronunciation</p>
     </div>
 
-    <div class="voice-warning" id="voiceWarning">
+    <div class="voice-warning glass" id="voiceWarning">
         ⚠️ Нет английского голоса. Установи English (US) в настройках системы.
     </div>
 
@@ -763,65 +549,54 @@
 </div>
 
 <script>
-    // === ЛИНЗА ПОД КУРСОРОМ ===
-    const lens = document.getElementById('cursorLens');
-    let mouseX = 0, mouseY = 0;
-    let lensX = 0, lensY = 0;
-
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-    });
-
-    function animateLens() {
-        // Плавное движение линзы за курсором
-        lensX += (mouseX - lensX) * 0.15;
-        lensY += (mouseY - lensY) * 0.15;
-        lens.style.left = lensX + 'px';
-        lens.style.top = lensY + 'px';
-        requestAnimationFrame(animateLens);
-    }
-    animateLens();
-
-    // На телефоне скрываем линзу
-    if ('ontouchstart' in window) {
-        lens.style.display = 'none';
+    function toggleTheme() {
+        document.body.classList.toggle('light');
+        const isLight = document.body.classList.contains('light');
+        document.getElementById('themeBtn').textContent = isLight ? '☀️' : '🌙';
+        localStorage.setItem('bodyparts_theme', isLight ? 'light' : 'dark');
     }
 
-    // === СЛОВА ===
+    (function() {
+        const saved = localStorage.getItem('bodyparts_theme');
+        if (saved === 'light') {
+            document.body.classList.add('light');
+            document.getElementById('themeBtn').textContent = '☀️';
+        }
+    })();
+
     const words = [
-        { en: 'Head',      tr: '[hɛd]',       ru: 'голова' },
-        { en: 'Shoulder',  tr: '[ˈʃoʊldər]',  ru: 'плечо' },
-        { en: 'Neck',      tr: '[nɛk]',       ru: 'шея' },
-        { en: 'Chest',     tr: '[tʃɛst]',     ru: 'грудь' },
-        { en: 'Finger',    tr: '[ˈfɪŋɡər]',   ru: 'палец руки' },
-        { en: 'Elbow',     tr: '[ˈɛlboʊ]',    ru: 'локоть' },
-        { en: 'Thumb',     tr: '[θʌm]',       ru: 'большой палец' },
-        { en: 'Wrist',     tr: '[rɪst]',      ru: 'запястье' },
-        { en: 'Hip',       tr: '[hɪp]',       ru: 'бедро сбоку' },
-        { en: 'Breast',    tr: '[brɛst]',     ru: 'грудь' },
-        { en: 'Belly',     tr: '[ˈbɛli]',     ru: 'живот' },
-        { en: 'Thigh',     tr: '[θaɪ]',       ru: 'бедро' },
-        { en: 'Knee',      tr: '[niː]',       ru: 'колено' },
-        { en: 'Leg',       tr: '[lɛɡ]',       ru: 'нога голень' },
-        { en: 'Toe',       tr: '[toʊ]',       ru: 'палец ноги' },
-        { en: 'Calf',      tr: '[kæf]',       ru: 'икра' },
-        { en: 'Ankle',     tr: '[ˈæŋkl]',     ru: 'лодыжка' },
-        { en: 'Foot',      tr: '[fʊt]',       ru: 'ступня' },
-        { en: 'Bottom',    tr: '[ˈbɒtəm]',    ru: 'попа' },
-        { en: 'Face',      tr: '[feɪs]',      ru: 'лицо' },
-        { en: 'Forearm',   tr: '[ˈfɔːrɑːrm]', ru: 'предплечье' },
-        { en: 'Arm',       tr: '[ɑːrm]',      ru: 'рука целиком' },
-        { en: 'Upper arm', tr: '[ˈʌpər ɑːrm]',ru: 'верх руки' },
-        { en: 'Nail',      tr: '[neɪl]',      ru: 'ноготь' },
-        { en: 'Side',      tr: '[saɪd]',      ru: 'бок' },
-        { en: 'Buttocks',  tr: '[ˈbʌtəks]',   ru: 'ягодицы' },
-        { en: 'Groin',     tr: '[ɡrɔɪn]',     ru: 'пах' },
-        { en: 'Armpit',    tr: '[ˈɑːrmpɪt]',  ru: 'подмышка' },
-        { en: 'Heel',      tr: '[hiːl]',      ru: 'пятка' },
-        { en: 'Waist',     tr: '[weɪst]',     ru: 'талия' },
-        { en: 'Chin',      tr: '[tʃɪn]',      ru: 'подбородок' },
-        { en: 'Sole',      tr: '[soʊl]',      ru: 'подошва' }
+        { en: 'Head', tr: '[hɛd]', ru: 'голова' },
+        { en: 'Shoulder', tr: '[ˈʃoʊldər]', ru: 'плечо' },
+        { en: 'Neck', tr: '[nɛk]', ru: 'шея' },
+        { en: 'Chest', tr: '[tʃɛst]', ru: 'грудь' },
+        { en: 'Finger', tr: '[ˈfɪŋɡər]', ru: 'палец руки' },
+        { en: 'Elbow', tr: '[ˈɛlboʊ]', ru: 'локоть' },
+        { en: 'Thumb', tr: '[θʌm]', ru: 'большой палец' },
+        { en: 'Wrist', tr: '[rɪst]', ru: 'запястье' },
+        { en: 'Hip', tr: '[hɪp]', ru: 'бедро сбоку' },
+        { en: 'Breast', tr: '[brɛst]', ru: 'грудь' },
+        { en: 'Belly', tr: '[ˈbɛli]', ru: 'живот' },
+        { en: 'Thigh', tr: '[θaɪ]', ru: 'бедро' },
+        { en: 'Knee', tr: '[niː]', ru: 'колено' },
+        { en: 'Leg', tr: '[lɛɡ]', ru: 'нога голень' },
+        { en: 'Toe', tr: '[toʊ]', ru: 'палец ноги' },
+        { en: 'Calf', tr: '[kæf]', ru: 'икра' },
+        { en: 'Ankle', tr: '[ˈæŋkl]', ru: 'лодыжка' },
+        { en: 'Foot', tr: '[fʊt]', ru: 'ступня' },
+        { en: 'Bottom', tr: '[ˈbɒtəm]', ru: 'попа' },
+        { en: 'Face', tr: '[feɪs]', ru: 'лицо' },
+        { en: 'Forearm', tr: '[ˈfɔːrɑːrm]', ru: 'предплечье' },
+        { en: 'Arm', tr: '[ɑːrm]', ru: 'рука целиком' },
+        { en: 'Upper arm', tr: '[ˈʌpər ɑːrm]', ru: 'верх руки' },
+        { en: 'Nail', tr: '[neɪl]', ru: 'ноготь' },
+        { en: 'Side', tr: '[saɪd]', ru: 'бок' },
+        { en: 'Buttocks', tr: '[ˈbʌtəks]', ru: 'ягодицы' },
+        { en: 'Groin', tr: '[ɡrɔɪn]', ru: 'пах' },
+        { en: 'Armpit', tr: '[ˈɑːrmpɪt]', ru: 'подмышка' },
+        { en: 'Heel', tr: '[hiːl]', ru: 'пятка' },
+        { en: 'Waist', tr: '[weɪst]', ru: 'талия' },
+        { en: 'Chin', tr: '[tʃɪn]', ru: 'подбородок' },
+        { en: 'Sole', tr: '[soʊl]', ru: 'подошва' }
     ];
 
     let englishVoice = null;
@@ -834,9 +609,7 @@
             const v = voices.find(voice => voice.name.includes(name));
             if (v) return v;
         }
-        return voices.find(v => v.lang === 'en-US')
-            || voices.find(v => v.lang === 'en-GB')
-            || voices.find(v => v.lang.toLowerCase().startsWith('en'));
+        return voices.find(v => v.lang === 'en-US') || voices.find(v => v.lang === 'en-GB') || voices.find(v => v.lang.toLowerCase().startsWith('en'));
     }
 
     function loadVoices() {
@@ -845,10 +618,7 @@
         englishVoice = pickEnglishVoice();
         const w = document.getElementById('voiceWarning');
         if (!englishVoice) w.classList.add('show');
-        else {
-            w.classList.remove('show');
-            console.log('Голос:', englishVoice.name, englishVoice.lang);
-        }
+        else w.classList.remove('show');
     }
 
     if ('speechSynthesis' in window) {
