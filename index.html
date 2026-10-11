@@ -72,7 +72,6 @@
         animation: floatBg 30s ease-in-out infinite;
         z-index: 0;
         pointer-events: none;
-        transition: background 0.5s ease;
     }
 
     @keyframes floatBg {
@@ -95,9 +94,7 @@
         -webkit-backdrop-filter: blur(20px) saturate(140%);
         border: 1px solid var(--glass-border);
         border-radius: 24px;
-        box-shadow:
-            0 8px 32px var(--shadow),
-            inset 0 1px 0 var(--glass-inset);
+        box-shadow: 0 8px 32px var(--shadow), inset 0 1px 0 var(--glass-inset);
         position: relative;
         overflow: hidden;
         transition: all 0.5s ease;
@@ -132,7 +129,6 @@
         letter-spacing: -0.5px;
         position: relative;
         z-index: 2;
-        transition: color 0.5s ease;
     }
 
     .header p {
@@ -143,7 +139,6 @@
         text-transform: uppercase;
         position: relative;
         z-index: 2;
-        transition: color 0.5s ease;
     }
 
     .theme-btn {
@@ -155,8 +150,6 @@
         border-radius: 50%;
         background: var(--glass-bg);
         border: 1px solid var(--glass-border);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
         color: var(--text-main);
         font-size: 20px;
         cursor: pointer;
@@ -164,15 +157,11 @@
         align-items: center;
         justify-content: center;
         z-index: 3;
-        box-shadow:
-            inset 0 1px 0 var(--glass-inset),
-            0 4px 12px var(--shadow);
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: inset 0 1px 0 var(--glass-inset), 0 4px 12px var(--shadow);
+        transition: all 0.3s ease;
     }
 
-    .theme-btn:active {
-        transform: scale(0.92);
-    }
+    .theme-btn:active { transform: scale(0.92); }
 
     .tabs {
         display: flex;
@@ -192,7 +181,7 @@
         cursor: pointer;
         font-family: inherit;
         border-radius: 18px;
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: all 0.3s ease;
         position: relative;
         z-index: 2;
     }
@@ -200,9 +189,7 @@
     .tab.active {
         background: var(--glass-bg-hover);
         color: var(--text-main);
-        box-shadow:
-            inset 0 1px 0 var(--glass-inset-hover),
-            0 4px 16px var(--shadow);
+        box-shadow: inset 0 1px 0 var(--glass-inset-hover), 0 4px 16px var(--shadow);
     }
 
     .mode { display: none; }
@@ -220,18 +207,11 @@
         border-radius: 18px;
         color: var(--text-main);
         outline: none;
-        transition: all 0.3s ease;
         position: relative;
         z-index: 2;
     }
 
     .search-box::placeholder { color: var(--text-soft); }
-
-    .search-box:focus {
-        border-color: var(--glass-border-hover);
-        background: var(--glass-bg-hover);
-        box-shadow: 0 0 0 4px var(--glow);
-    }
 
     .word-item {
         display: flex;
@@ -239,102 +219,51 @@
         gap: 12px;
         padding: 15px 18px;
         background: var(--glass-bg);
-        backdrop-filter: blur(20px) saturate(140%);
-        -webkit-backdrop-filter: blur(20px) saturate(140%);
         border: 1px solid var(--glass-border);
         border-radius: 18px;
         margin-bottom: 8px;
         cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow:
-            inset 0 1px 0 var(--glass-inset),
-            0 4px 16px var(--shadow);
+        transition: all 0.3s ease;
+        box-shadow: inset 0 1px 0 var(--glass-inset), 0 4px 16px var(--shadow);
     }
 
-    .word-item:active,
-    .word-item.playing {
+    .word-item:active, .word-item.playing {
         background: var(--glass-bg-hover);
         transform: scale(0.98);
         border-color: var(--glass-border-hover);
     }
 
     .word-info { flex: 1; min-width: 0; position: relative; z-index: 2; }
+    .word-en { font-size: 17px; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
+    .word-tr { font-size: 12.5px; color: var(--text-dim); font-weight: 500; margin-bottom: 2px; }
+    .word-ru { font-size: 13.5px; color: var(--text-soft); }
+    .play-icon { font-size: 18px; flex-shrink: 0; opacity: 0.6; }
 
-    .word-en {
-        font-size: 17px;
-        font-weight: 700;
-        color: var(--text-main);
-        margin-bottom: 4px;
-    }
-
-    .word-tr {
-        font-size: 12.5px;
-        color: var(--text-dim);
-        font-weight: 500;
-        margin-bottom: 2px;
-    }
-
-    .word-ru {
-        font-size: 13.5px;
-        color: var(--text-soft);
-    }
-
-    .play-icon {
-        font-size: 18px;
-        flex-shrink: 0;
-        opacity: 0.6;
-    }
-
-    .listen-block {
-        text-align: center;
-        padding: 32px 20px;
-    }
-
-    .listen-instruction {
-        font-size: 13px;
-        color: var(--text-dim);
-        margin-bottom: 22px;
-        position: relative;
-        z-index: 2;
-    }
+    .listen-block { text-align: center; padding: 32px 20px; }
+    .listen-instruction { font-size: 13px; color: var(--text-dim); margin-bottom: 22px; position: relative; z-index: 2; }
 
     .big-speaker {
         width: 130px;
         height: 130px;
         border-radius: 50%;
         background: var(--glass-bg);
-        backdrop-filter: blur(20px) saturate(140%);
         border: 1px solid var(--glass-border);
         color: var(--text-main);
         font-size: 50px;
         cursor: pointer;
-        box-shadow:
-            inset 0 1px 0 var(--glass-inset),
-            0 12px 40px var(--shadow);
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: inset 0 1px 0 var(--glass-inset), 0 12px 40px var(--shadow);
+        transition: all 0.3s ease;
         position: relative;
         z-index: 2;
     }
 
     .big-speaker:active { transform: scale(0.95); }
+    .replay-hint { font-size: 11px; color: var(--text-soft); margin-top: 18px; position: relative; z-index: 2; }
 
-    .replay-hint {
-        font-size: 11px;
-        color: var(--text-soft);
-        margin-top: 18px;
-        position: relative;
-        z-index: 2;
-    }
-
-    .options {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
+    .options { display: flex; flex-direction: column; gap: 10px; }
 
     .option {
         background: var(--glass-bg);
-        backdrop-filter: blur(20px);
         border: 1px solid var(--glass-border);
         border-radius: 18px;
         padding: 17px 22px;
@@ -347,60 +276,19 @@
     }
 
     .option:active { background: var(--glass-bg-hover); transform: scale(0.98); }
-
     .opt-en { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
     .opt-ru { font-size: 12.5px; color: var(--text-dim); }
-
-    .option.correct {
-        background: var(--glass-bg-hover);
-        border-color: var(--glass-border-hover);
-    }
-
+    .option.correct { background: var(--glass-bg-hover); border-color: var(--glass-border-hover); }
     .option.wrong { opacity: 0.4; }
 
-    .stats {
-        display: flex;
-        justify-content: space-around;
-        padding: 16px;
-        margin-top: 12px;
-    }
-
+    .stats { display: flex; justify-content: space-around; padding: 16px; margin-top: 12px; }
     .stat-box { text-align: center; }
-
-    .stat-label {
-        font-size: 10px;
-        color: var(--text-soft);
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        font-weight: 600;
-        margin-bottom: 6px;
-    }
-
+    .stat-label { font-size: 10px; color: var(--text-soft); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; margin-bottom: 6px; }
     .stat-num { font-size: 22px; font-weight: 800; color: var(--text-main); }
 
-    .translate-block {
-        text-align: center;
-        padding: 28px 22px;
-    }
-
-    .translate-label {
-        font-size: 11px;
-        color: var(--text-soft);
-        margin-bottom: 12px;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        position: relative;
-        z-index: 2;
-    }
-
-    .translate-word {
-        font-size: 36px;
-        font-weight: 800;
-        color: var(--text-main);
-        margin-bottom: 20px;
-        position: relative;
-        z-index: 2;
-    }
+    .translate-block { text-align: center; padding: 28px 22px; }
+    .translate-label { font-size: 11px; color: var(--text-soft); margin-bottom: 12px; letter-spacing: 2px; text-transform: uppercase; position: relative; z-index: 2; }
+    .translate-word { font-size: 36px; font-weight: 800; color: var(--text-main); margin-bottom: 20px; position: relative; z-index: 2; }
 
     .translate-input {
         width: 100%;
@@ -431,7 +319,6 @@
         cursor: pointer;
         font-family: inherit;
         box-shadow: 0 8px 25px var(--shadow);
-        transition: all 0.3s ease;
         position: relative;
         z-index: 2;
     }
@@ -445,9 +332,6 @@
         font-weight: 600;
         color: var(--text-dim);
     }
-
-    .translate-result.correct { color: var(--text-main); }
-    .translate-result.wrong { color: var(--text-soft); }
 
     .speak-word-btn {
         background: var(--glass-bg);
@@ -477,13 +361,8 @@
     .voice-warning.show { display: block; }
 
     @media (max-width: 480px) {
-        .app { padding: 14px 12px 30px; }
-        .header { padding: 24px 16px 20px; }
         .header h1 { font-size: 22px; }
-        .theme-btn { width: 38px; height: 38px; font-size: 18px; top: 12px; right: 12px; }
-        .tab { font-size: 11.5px; padding: 11px 3px; }
-        .big-speaker { width: 110px; height: 110px; font-size: 44px; }
-        .translate-word { font-size: 30px; }
+        .theme-btn { width: 38px; height: 38px; font-size: 18px; }
     }
 </style>
 </head>
@@ -491,7 +370,7 @@
 
 <div class="app">
     <div class="header glass">
-        <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Сменить тему">🌙</button>
+        <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌙</button>
         <h1>Части тела</h1>
         <p>English · pronunciation</p>
     </div>
@@ -521,18 +400,9 @@
         </div>
         <div class="options" id="options"></div>
         <div class="stats glass">
-            <div class="stat-box">
-                <div class="stat-label">Верно</div>
-                <div class="stat-num" id="lCorrect">0</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-label">Ошибок</div>
-                <div class="stat-num" id="lWrong">0</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-label">Всего</div>
-                <div class="stat-num" id="lTotal">0</div>
-            </div>
+            <div class="stat-box"><div class="stat-label">Верно</div><div class="stat-num" id="lCorrect">0</div></div>
+            <div class="stat-box"><div class="stat-label">Ошибок</div><div class="stat-num" id="lWrong">0</div></div>
+            <div class="stat-box"><div class="stat-label">Всего</div><div class="stat-num" id="lTotal">0</div></div>
         </div>
     </div>
 
@@ -600,6 +470,7 @@
     ];
 
     let englishVoice = null;
+    let russianVoice = null;
 
     function pickEnglishVoice() {
         const voices = window.speechSynthesis.getVoices();
@@ -612,10 +483,16 @@
         return voices.find(v => v.lang === 'en-US') || voices.find(v => v.lang === 'en-GB') || voices.find(v => v.lang.toLowerCase().startsWith('en'));
     }
 
+    function pickRussianVoice() {
+        const voices = window.speechSynthesis.getVoices();
+        return voices.find(v => v.lang === 'ru-RU') || voices.find(v => v.lang.startsWith('ru'));
+    }
+
     function loadVoices() {
         const voices = window.speechSynthesis.getVoices();
         if (!voices.length) return;
         englishVoice = pickEnglishVoice();
+        russianVoice = pickRussianVoice();
         const w = document.getElementById('voiceWarning');
         if (!englishVoice) w.classList.add('show');
         else w.classList.remove('show');
@@ -626,17 +503,36 @@
         window.speechSynthesis.onvoiceschanged = loadVoices;
     }
 
-    function speak(text) {
+    // === ОЗВУЧКА: английский + русский ===
+    function speak(text, textRu) {
         if (!('speechSynthesis' in window)) return;
         window.speechSynthesis.cancel();
+
+        // Английское слово
         if (!englishVoice) englishVoice = pickEnglishVoice();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = 'en-US';
-        u.rate = 0.8;
-        u.pitch = 1.0;
-        u.volume = 1.0;
-        if (englishVoice) u.voice = englishVoice;
-        window.speechSynthesis.speak(u);
+        const uEn = new SpeechSynthesisUtterance(text);
+        uEn.lang = 'en-US';
+        uEn.rate = 0.8;
+        uEn.pitch = 1.0;
+        uEn.volume = 1.0;
+        if (englishVoice) uEn.voice = englishVoice;
+
+        window.speechSynthesis.speak(uEn);
+
+        // Русский перевод — через 1.5 секунды
+        if (textRu) {
+            if (!russianVoice) russianVoice = pickRussianVoice();
+            const uRu = new SpeechSynthesisUtterance(textRu);
+            uRu.lang = 'ru-RU';
+            uRu.rate = 0.9;
+            uRu.pitch = 1.0;
+            uRu.volume = 1.0;
+            if (russianVoice) uRu.voice = russianVoice;
+
+            setTimeout(() => {
+                window.speechSynthesis.speak(uRu);
+            }, 1500);
+        }
     }
 
     function switchMode(mode, btn) {
@@ -664,7 +560,7 @@
                 <div class="play-icon">🔊</div>
             `;
             item.onclick = () => {
-                speak(w.en);
+                speak(w.en, w.ru);
                 item.classList.add('playing');
                 setTimeout(() => item.classList.remove('playing'), 1500);
             };
@@ -706,7 +602,7 @@
         if (!current) return;
         const sp = document.getElementById('bigSpeaker');
         sp.classList.add('playing');
-        speak(current.en);
+        speak(current.en, current.ru);
         setTimeout(() => sp.classList.remove('playing'), 1500);
     }
 
@@ -736,7 +632,9 @@
         document.getElementById('trResult').className = 'translate-result';
     }
 
-    function speakWord() { if (trCurrent) speak(trCurrent.en); }
+    function speakWord() {
+        if (trCurrent) speak(trCurrent.en, trCurrent.ru);
+    }
 
     function checkTr() {
         const inp = document.getElementById('trInput').value.trim().toLowerCase();
@@ -745,7 +643,7 @@
         if (inp === correct || (correct.includes(inp) && inp.length > 2)) {
             res.textContent = '✓ Верно! ' + trCurrent.en + ' — ' + trCurrent.ru;
             res.className = 'translate-result correct';
-            speak(trCurrent.en);
+            speak(trCurrent.en, trCurrent.ru);
             setTimeout(newTranslate, 1800);
         } else {
             res.textContent = '✗ Правильно: ' + trCurrent.ru;
