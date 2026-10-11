@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Части тела — English</title>
+<style>
+    ::-webkit-scrollbar { width: 0; height: 0; display: none; }
+    * { scrollbar-width: none; -ms-overflow-style: none; -webkit-tap-highlight-color: transparent; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+        font-family: -apple-system, 'SF Pro Display', 'Segoe UI', sans-serif;
+        background: #0a0a0c;
+        color: #fff;
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+        cursor: crosshair;
+    }
+
+    /* === Размытый светлый фон === */
+    .bg-layer {
+        position: fixed;
+        inset: -15%;
+        z-index: 0;
+        pointer-events: none;
+        filter: blur(70px);
+        opacity: 0.7;
+    }
+
+    .bg-blob {
+        position: absolute;
+        border-radius: 50%;
+        mix-blend-mode: screen;
+        animation: moveBg 30s ease-in-out infinite;
+    }
+
+    .bg-blob.b1 {
+        width: 55vw; height: 55vw;
+        top: -10%; left: -10%;
+        background: radial-gradient(circle, rgba(120, 130, 180, 0.5) 0%, transparent 70%);
+    }
+
+    .bg-blob.b2 {
+        width: 50vw; height: 50vw;
+        bottom: -15%; right: -10%;
+        background: radial-gradient(circle, rgba(180, 130, 150, 0.35) 0%, transparent 70%);
+        animation-delay: -10s;
+    }
+
+    .bg-blob.b3 {
+        width: 45vw; height: 45vw;
+        top: 30%; left: 40%;
+        background: radial-gradient(circle, rgba(140, 160, 200, 0.35) 0%, transparent 70%);
+        animation-delay: -20s;
+    }
+
+    @keyframes moveBg {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        33%      { transform: translate(4%, -3%) scale(1.1); }
+        66%      { transform: translate(-3%, 4%) scale(0.95); }
+    }
+
+    /* Тонкие линии фона */
+    .bg-lines {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        background-image: linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+        background-size: 100% 80px;
+        mask-image: radial-gradient(ellipse at center, #000 40%, transparent 80%);
+        -webkit-mask-image: radial-gradient(ellipse at center, #000 40%, transparent 80%);
+        pointer-events: none;
+    }
+
+    /* === Линза под курсором === */
+    .cursor-lens {
+        position: fixed;
+        width: 400px;
+        height: 400px;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 5;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(
+            circle,
+            rgba(255, 255, 255, 0.14) 0%,
+            rgba(255, 255, 255, 0.06) 30%,
+            transparent 70%
+        );
+        backdrop-filter: blur(8px) saturate(140%);
+        -webkit-backdrop-filter: blur(8px) saturate(140%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        mix-blend-mode: screen;
+    }
+
+    body:hover .cursor-lens {
+        opacity: 1;
+    }
+
+    /* Второй слой — свечение */
+    .cursor-lens::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: radial-gradient(
+            circle,
+            rgba(255, 255, 255, 0.05) 0%,
+            transparent 60%
+        );
+    }
+
+    /* === Приложение === */
+    .app {
+        position: relative;
+        z-index: 10;
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 20px 16px 40px;
+    }
+
+    /* === Жидкое стекло === */
+    .glass {
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.14) 0%,
+            rgba(255, 255, 255, 0.06) 50%,
+            rgba(255, 255, 255, 0.1) 100%
+        );
+        backdrop-filter: blur(24px) saturate(200%) brightness(1.1);
+        -webkit-backdrop-filter: blur(24px) saturate(200%) brightness(1.1);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 24px;
+        box-shadow:
+            0 8px 32px rgba(0, 0, 0, 0.5),
+            0 1px 0 rgba(255, 255, 255, 0.4) inset,
+            0 -1px 0 rgba(255, 255, 255, 0.08) inset,
+            0 0 40px rgba(255, 255, 255, 0.05);
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+    }
+
+    /* Блик на стекле */
+    .glass::before {
+        content: "";
+        position: absolute;
+        top: 0; left: -50%;
+        width: 200%; height: 100%;
+        background: linear-gradient(
+            115deg,
+            transparent 35%,
+            rgba(255, 255, 255, 0.25) 45%,
+            rgba(255, 255, 255, 0.35) 50%,
+            rgba(255, 255, 255, 0.25) 55%,
+            transparent 65%
+        );
+        animation: shine 5s ease-in-out infinite;
+        pointer-events: none;
+    }
+
+    @keyframes shine {
+        0%, 100% { transform: translateX(-40%); }
+        50%      { transform: translateX(40%); }
+    }
+
+    /* Капли на стекле */
+    .glass::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image:
+            radial-gradient(circle at 15% 30%, rgba(255,255,255,0.12) 0px, transparent 3px),
+            radial-gradient(circle at 70% 60%, rgba(255,255,255,0.09) 0px, transparent 2px),
+            radial-gradient(circle at 45% 80%, rgba(255,255,255,0.11) 0px, transparent 3px),
+            radial-gradient(circle at 85% 20%, rgba(255,255,255,0.08) 0px, transparent 2px);
+        pointer-events: none;
+        border-radius: 24px;
+    }
+
+    /* Заголовок */
+    .header {
+        text-align: center;
+        padding: 32px 20px;
+        margin-bottom: 16px;
+    }
+
+    .header h1 {
+        font-size: 28px;
+        font-weight: 700;
+        color: #fff;
+        letter-spacing: -0.5px;
+        position: relative;
+        z-index: 2;
+        text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+    }
+
+    .header p {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 8px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Табы */
+    .tabs {
+        display: flex;
+        gap: 6px;
+        padding: 5px;
+        margin-bottom: 16px;
+    }
+
+    .tab {
+        flex: 1;
+        background: none;
+        border: none;
+        padding: 13px 6px;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        font-family: inherit;
+        border-radius: 18px;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+        z-index: 2;
+    }
+
+    .tab.active {
+        background: rgba(255, 255, 255, 0.15);
+        color: #fff;
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.3),
+            0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .mode { display: none; }
+    .mode.active { display: block; }
+
+    /* Поиск */
+    .search-wrap {
+        padding: 8px;
+    }
+
+    .search-box {
+        width: 100%;
+        padding: 14px 18px;
+        font-size: 15px;
+        font-family: inherit;
+        background: rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 18px;
+        color: #fff;
+        outline: none;
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 2;
+    }
+
+    .search-box::placeholder { color: rgba(255, 255, 255, 0.4); }
+
+    .search-box:focus {
+        border-color: rgba(255, 255, 255, 0.3);
+        background: rgba(0, 0, 0, 0.35);
+        box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.06);
+    }
+
+    /* Слова */
+    .word-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 20px;
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.12) 0%,
+            rgba(255, 255, 255, 0.05) 100%
+        );
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+        overflow: hidden;
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.2),
+            0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .word-item::before {
+        content: "";
+        position: absolute;
+        top: 0; left: -50%;
+        width: 200%; height: 100%;
+        background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.15) 50%, transparent 60%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .word-item:hover::before {
+        opacity: 1;
+        animation: shine 2s ease-in-out infinite;
+    }
+
+    .word-item:active,
+    .word-item.playing {
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.2) 0%,
+            rgba(255, 255, 255, 0.1) 100%
+        );
+        transform: scale(0.98);
+        border-color: rgba(255, 255, 255, 0.3);
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.35),
+            0 0 40px rgba(255, 255, 255, 0.15);
+    }
+
+    .word-info { flex: 1; min-width: 0; position: relative; z-index: 2; }
+
+    .word-en {
+        font-size: 17px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 4px;
+    }
+
+    .word-tr {
+        font-size: 12.5px;
+        color: rgba(255, 255, 255, 0.6);
+        font-weight: 500;
+        margin-bottom: 2px;
+    }
+
+    .word-ru {
+        font-size: 13.5px;
+        color: rgba(255, 255, 255, 0.45);
+    }
+
+    .play-icon {
+        font-size: 18px;
+        flex-shrink: 0;
+        opacity: 0.6;
+        position: relative;
+        z-index: 2;
+    }
+
+    .word-item.playing .play-icon {
+        opacity: 1;
+        animation: pulse 0.6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50%      { transform: scale(1.2); }
+    }
+
+    /* Аудирование */
+    .listen-block {
+        text-align: center;
+        padding: 36px 20px;
+    }
+
+    .listen-instruction {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 22px;
+        letter-spacing: 0.5px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .big-speaker {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.18) 0%,
+            rgba(255, 255, 255, 0.08) 100%
+        );
+        backdrop-filter: blur(24px) saturate(180%);
+        -webkit-backdrop-filter: blur(24px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        color: #fff;
+        font-size: 50px;
+        cursor: pointer;
+        box-shadow:
+            inset 0 2px 0 rgba(255, 255, 255, 0.3),
+            0 12px 40px rgba(0, 0, 0, 0.5),
+            0 0 60px rgba(255, 255, 255, 0.1);
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+        z-index: 2;
+    }
+
+    .big-speaker::after {
+        content: "";
+        position: absolute;
+        inset: -14px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        animation: ripple 3s ease-out infinite;
+        pointer-events: none;
+    }
+
+    @keyframes ripple {
+        0% { transform: scale(0.9); opacity: 1; }
+        100% { transform: scale(1.4); opacity: 0; }
+    }
+
+    .big-speaker:active {
+        transform: scale(0.95);
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.25) 0%,
+            rgba(255, 255, 255, 0.15) 100%
+        );
+    }
+
+    .big-speaker.playing {
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.3) 0%,
+            rgba(255, 255, 255, 0.15) 100%
+        );
+        box-shadow:
+            inset 0 2px 0 rgba(255, 255, 255, 0.5),
+            0 0 80px rgba(255, 255, 255, 0.3);
+    }
+
+    .replay-hint {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.35);
+        margin-top: 18px;
+        letter-spacing: 0.5px;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Опции */
+    .options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .option {
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.1) 0%,
+            rgba(255, 255, 255, 0.04) 100%
+        );
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 20px;
+        padding: 18px 22px;
+        text-align: left;
+        cursor: pointer;
+        color: #fff;
+        font-family: inherit;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.2),
+            0 4px 16px rgba(0, 0, 0, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .option:active {
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.18) 0%,
+            rgba(255, 255, 255, 0.08) 100%
+        );
+        transform: scale(0.98);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .option .opt-en {
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 4px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .option .opt-ru {
+        font-size: 12.5px;
+        color: rgba(255, 255, 255, 0.5);
+        position: relative;
+        z-index: 2;
+    }
+
+    .option.correct {
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.25) 0%,
+            rgba(255, 255, 255, 0.12) 100%
+        );
+        border-color: rgba(255, 255, 255, 0.4);
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.5),
+            0 0 60px rgba(255, 255, 255, 0.2);
+    }
+
+    .option.wrong {
+        background: rgba(255, 255, 255, 0.03);
+        border-color: rgba(255, 255, 255, 0.08);
+        opacity: 0.4;
+        animation: shake 0.5s ease;
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25%      { transform: translateX(-6px); }
+        75%      { transform: translateX(6px); }
+    }
+
+    /* Статистика */
+    .stats {
+        display: flex;
+        justify-content: space-around;
+        padding: 18px;
+        margin-top: 14px;
+    }
+
+    .stat-box { text-align: center; position: relative; z-index: 2; }
+
+    .stat-label {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.45);
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+
+    .stat-num {
+        font-size: 24px;
+        font-weight: 800;
+        color: #fff;
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Перевод */
+    .translate-block {
+        text-align: center;
+        padding: 30px 22px;
+    }
+
+    .translate-label {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.45);
+        margin-bottom: 14px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        position: relative;
+        z-index: 2;
+    }
+
+    .translate-word {
+        font-size: 38px;
+        font-weight: 800;
+        color: #fff;
+        margin-bottom: 22px;
+        position: relative;
+        z-index: 2;
+        letter-spacing: -0.5px;
+        text-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
+    }
+
+    .translate-input {
+        width: 100%;
+        padding: 16px 20px;
+        font-size: 16px;
+        font-family: inherit;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 18px;
+        color: #fff;
+        outline: none;
+        margin-bottom: 12px;
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 2;
+    }
+
+    .translate-input::placeholder { color: rgba(255, 255, 255, 0.4); }
+
+    .translate-input:focus {
+        border-color: rgba(255, 255, 255, 0.3);
+        background: rgba(0, 0, 0, 0.4);
+        box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.08);
+    }
+
+    .btn-check {
+        width: 100%;
+        padding: 16px;
+        font-size: 15px;
+        font-weight: 700;
+        color: #000;
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 18px;
+        cursor: pointer;
+        font-family: inherit;
+        box-shadow:
+            0 8px 30px rgba(255, 255, 255, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 1);
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+        z-index: 2;
+    }
+
+    .btn-check:active {
+        transform: scale(0.97);
+        background: rgba(255, 255, 255, 0.85);
+    }
+
+    .translate-result {
+        font-size: 14px;
+        margin-top: 18px;
+        min-height: 22px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.8);
+        position: relative;
+        z-index: 2;
+    }
+
+    .translate-result.correct { color: #fff; }
+    .translate-result.wrong { color: rgba(255, 255, 255, 0.6); }
+
+    .speak-word-btn {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        padding: 11px 20px;
+        font-size: 15px;
+        cursor: pointer;
+        color: #fff;
+        font-family: inherit;
+        margin-bottom: 16px;
+        transition: all 0.3s ease;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        position: relative;
+        z-index: 2;
+    }
+
+    .speak-word-btn:active {
+        background: rgba(255, 255, 255, 0.15);
+        transform: scale(0.97);
+    }
+
+    .voice-warning {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        padding: 14px 18px;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.75);
+        margin-bottom: 14px;
+        line-height: 1.5;
+        display: none;
+        backdrop-filter: blur(20px);
+    }
+
+    .voice-warning.show { display: block; }
+
+    @media (max-width: 480px) {
+        .app { padding: 14px 12px 30px; }
+        .header { padding: 26px 18px; }
+        .header h1 { font-size: 24px; }
+        .tab { font-size: 11.5px; padding: 12px 4px; }
+        .big-speaker { width: 110px; height: 110px; font-size: 44px; }
+        .translate-word { font-size: 30px; }
+        .word-en { font-size: 16px; }
+        .stat-num { font-size: 20px; }
+        .cursor-lens { display: none; } /* на телефоне линза не нужна */
+    }
+</style>
+</head>
+<body>
+
+<!-- Фоновые пятна (приглушённые) -->
+<div class="bg-layer">
+    <div class="bg-blob b1"></div>
+    <div class="bg-blob b2"></div>
+    <div class="bg-blob b3"></div>
+</div>
+<div class="bg-lines"></div>
+
+<!-- Линза под курсором -->
+<div class="cursor-lens" id="cursorLens"></div>
+
+<div class="app">
+    <div class="header glass">
+        <h1>Части тела</h1>
+        <p>English · pronunciation</p>
+    </div>
+
+    <div class="voice-warning" id="voiceWarning">
+        ⚠️ Нет английского голоса. Установи English (US) в настройках системы.
+    </div>
+
+    <div class="tabs glass">
+        <button class="tab active" onclick="switchMode('learn', this)">Учить</button>
+        <button class="tab" onclick="switchMode('listen', this)">Слушать</button>
+        <button class="tab" onclick="switchMode('translate', this)">Перевести</button>
+    </div>
+
+    <div id="learnMode" class="mode active">
+        <div class="glass search-wrap">
+            <input type="text" class="search-box" id="searchBox" placeholder="Поиск..." oninput="filterWords()">
+        </div>
+        <div id="wordList"></div>
+    </div>
+
+    <div id="listenMode" class="mode">
+        <div class="glass listen-block">
+            <div class="listen-instruction">Послушай и выбери перевод</div>
+            <button class="big-speaker" id="bigSpeaker" onclick="playCurrent()">🔊</button>
+            <div class="replay-hint">Нажми ещё раз, чтобы повторить</div>
+        </div>
+        <div class="options" id="options"></div>
+        <div class="stats glass">
+            <div class="stat-box">
+                <div class="stat-label">Верно</div>
+                <div class="stat-num" id="lCorrect">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Ошибок</div>
+                <div class="stat-num" id="lWrong">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Всего</div>
+                <div class="stat-num" id="lTotal">0</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="translateMode" class="mode">
+        <div class="glass translate-block">
+            <div class="translate-label">Переведи слово</div>
+            <div class="translate-word" id="trWord">Head</div>
+            <button class="speak-word-btn" onclick="speakWord()">🔊 Послушать</button>
+            <input type="text" class="translate-input" id="trInput" placeholder="Перевод на русский..." autocomplete="off">
+            <button class="btn-check" onclick="checkTr()">Проверить</button>
+            <div class="translate-result" id="trResult"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // === ЛИНЗА ПОД КУРСОРОМ ===
+    const lens = document.getElementById('cursorLens');
+    let mouseX = 0, mouseY = 0;
+    let lensX = 0, lensY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+
+    function animateLens() {
+        // Плавное движение линзы за курсором
+        lensX += (mouseX - lensX) * 0.15;
+        lensY += (mouseY - lensY) * 0.15;
+        lens.style.left = lensX + 'px';
+        lens.style.top = lensY + 'px';
+        requestAnimationFrame(animateLens);
+    }
+    animateLens();
+
+    // На телефоне скрываем линзу
+    if ('ontouchstart' in window) {
+        lens.style.display = 'none';
+    }
+
+    // === СЛОВА ===
+    const words = [
+        { en: 'Head',      tr: '[hɛd]',       ru: 'голова' },
+        { en: 'Shoulder',  tr: '[ˈʃoʊldər]',  ru: 'плечо' },
+        { en: 'Neck',      tr: '[nɛk]',       ru: 'шея' },
+        { en: 'Chest',     tr: '[tʃɛst]',     ru: 'грудь' },
+        { en: 'Finger',    tr: '[ˈfɪŋɡər]',   ru: 'палец руки' },
+        { en: 'Elbow',     tr: '[ˈɛlboʊ]',    ru: 'локоть' },
+        { en: 'Thumb',     tr: '[θʌm]',       ru: 'большой палец' },
+        { en: 'Wrist',     tr: '[rɪst]',      ru: 'запястье' },
+        { en: 'Hip',       tr: '[hɪp]',       ru: 'бедро сбоку' },
+        { en: 'Breast',    tr: '[brɛst]',     ru: 'грудь' },
+        { en: 'Belly',     tr: '[ˈbɛli]',     ru: 'живот' },
+        { en: 'Thigh',     tr: '[θaɪ]',       ru: 'бедро' },
+        { en: 'Knee',      tr: '[niː]',       ru: 'колено' },
+        { en: 'Leg',       tr: '[lɛɡ]',       ru: 'нога голень' },
+        { en: 'Toe',       tr: '[toʊ]',       ru: 'палец ноги' },
+        { en: 'Calf',      tr: '[kæf]',       ru: 'икра' },
+        { en: 'Ankle',     tr: '[ˈæŋkl]',     ru: 'лодыжка' },
+        { en: 'Foot',      tr: '[fʊt]',       ru: 'ступня' },
+        { en: 'Bottom',    tr: '[ˈbɒtəm]',    ru: 'попа' },
+        { en: 'Face',      tr: '[feɪs]',      ru: 'лицо' },
+        { en: 'Forearm',   tr: '[ˈfɔːrɑːrm]', ru: 'предплечье' },
+        { en: 'Arm',       tr: '[ɑːrm]',      ru: 'рука целиком' },
+        { en: 'Upper arm', tr: '[ˈʌpər ɑːrm]',ru: 'верх руки' },
+        { en: 'Nail',      tr: '[neɪl]',      ru: 'ноготь' },
+        { en: 'Side',      tr: '[saɪd]',      ru: 'бок' },
+        { en: 'Buttocks',  tr: '[ˈbʌtəks]',   ru: 'ягодицы' },
+        { en: 'Groin',     tr: '[ɡrɔɪn]',     ru: 'пах' },
+        { en: 'Armpit',    tr: '[ˈɑːrmpɪt]',  ru: 'подмышка' },
+        { en: 'Heel',      tr: '[hiːl]',      ru: 'пятка' },
+        { en: 'Waist',     tr: '[weɪst]',     ru: 'талия' },
+        { en: 'Chin',      tr: '[tʃɪn]',      ru: 'подбородок' },
+        { en: 'Sole',      tr: '[soʊl]',      ru: 'подошва' }
+    ];
+
+    let englishVoice = null;
+
+    function pickEnglishVoice() {
+        const voices = window.speechSynthesis.getVoices();
+        if (!voices.length) return null;
+        const priority = ['Google US English', 'Samantha', 'Microsoft Zira', 'Microsoft Aria', 'Alex', 'Daniel', 'Karen'];
+        for (const name of priority) {
+            const v = voices.find(voice => voice.name.includes(name));
+            if (v) return v;
+        }
+        return voices.find(v => v.lang === 'en-US')
+            || voices.find(v => v.lang === 'en-GB')
+            || voices.find(v => v.lang.toLowerCase().startsWith('en'));
+    }
+
+    function loadVoices() {
+        const voices = window.speechSynthesis.getVoices();
+        if (!voices.length) return;
+        englishVoice = pickEnglishVoice();
+        const w = document.getElementById('voiceWarning');
+        if (!englishVoice) w.classList.add('show');
+        else {
+            w.classList.remove('show');
+            console.log('Голос:', englishVoice.name, englishVoice.lang);
+        }
+    }
+
+    if ('speechSynthesis' in window) {
+        loadVoices();
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    function speak(text) {
+        if (!('speechSynthesis' in window)) return;
+        window.speechSynthesis.cancel();
+        if (!englishVoice) englishVoice = pickEnglishVoice();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'en-US';
+        u.rate = 0.8;
+        u.pitch = 1.0;
+        u.volume = 1.0;
+        if (englishVoice) u.voice = englishVoice;
+        window.speechSynthesis.speak(u);
+    }
+
+    function switchMode(mode, btn) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.mode').forEach(m => m.classList.remove('active'));
+        if (mode === 'learn') document.getElementById('learnMode').classList.add('active');
+        else if (mode === 'listen') { document.getElementById('listenMode').classList.add('active'); newQuestion(); }
+        else if (mode === 'translate') { document.getElementById('translateMode').classList.add('active'); newTranslate(); }
+    }
+
+    function buildList() {
+        const list = document.getElementById('wordList');
+        list.innerHTML = '';
+        words.forEach(w => {
+            const item = document.createElement('div');
+            item.className = 'word-item';
+            item.dataset.search = (w.en + ' ' + w.ru).toLowerCase();
+            item.innerHTML = `
+                <div class="word-info">
+                    <div class="word-en">${w.en}</div>
+                    <div class="word-tr">${w.tr}</div>
+                    <div class="word-ru">${w.ru}</div>
+                </div>
+                <div class="play-icon">🔊</div>
+            `;
+            item.onclick = () => {
+                speak(w.en);
+                item.classList.add('playing');
+                setTimeout(() => item.classList.remove('playing'), 1500);
+            };
+            list.appendChild(item);
+        });
+    }
+
+    function filterWords() {
+        const q = document.getElementById('searchBox').value.toLowerCase();
+        document.querySelectorAll('.word-item').forEach(item => {
+            item.style.display = item.dataset.search.includes(q) ? 'flex' : 'none';
+        });
+    }
+
+    let current = null, lCorrect = 0, lWrong = 0, lTotal = 0;
+
+    function newQuestion() {
+        const correct = words[Math.floor(Math.random() * words.length)];
+        current = correct;
+        const wrongs = [];
+        while (wrongs.length < 3) {
+            const w = words[Math.floor(Math.random() * words.length)];
+            if (w.en !== correct.en && !wrongs.find(x => x.en === w.en)) wrongs.push(w);
+        }
+        const opts = [correct, ...wrongs].sort(() => Math.random() - 0.5);
+        const box = document.getElementById('options');
+        box.innerHTML = '';
+        opts.forEach(o => {
+            const b = document.createElement('button');
+            b.className = 'option';
+            b.innerHTML = `<div class="opt-en">${o.en}</div><div class="opt-ru">${o.ru}</div>`;
+            b.onclick = () => checkAnswer(b, o);
+            box.appendChild(b);
+        });
+        setTimeout(playCurrent, 500);
+    }
+
+    function playCurrent() {
+        if (!current) return;
+        const sp = document.getElementById('bigSpeaker');
+        sp.classList.add('playing');
+        speak(current.en);
+        setTimeout(() => sp.classList.remove('playing'), 1500);
+    }
+
+    function checkAnswer(btn, o) {
+        lTotal++;
+        document.getElementById('lTotal').textContent = lTotal;
+        if (o.en === current.en) {
+            btn.classList.add('correct');
+            lCorrect++;
+            document.getElementById('lCorrect').textContent = lCorrect;
+            setTimeout(newQuestion, 1400);
+        } else {
+            btn.classList.add('wrong');
+            lWrong++;
+            document.getElementById('lWrong').textContent = lWrong;
+            setTimeout(() => btn.classList.remove('wrong'), 700);
+        }
+    }
+
+    let trCurrent = null;
+
+    function newTranslate() {
+        trCurrent = words[Math.floor(Math.random() * words.length)];
+        document.getElementById('trWord').textContent = trCurrent.en;
+        document.getElementById('trInput').value = '';
+        document.getElementById('trResult').textContent = '';
+        document.getElementById('trResult').className = 'translate-result';
+    }
+
+    function speakWord() { if (trCurrent) speak(trCurrent.en); }
+
+    function checkTr() {
+        const inp = document.getElementById('trInput').value.trim().toLowerCase();
+        const res = document.getElementById('trResult');
+        const correct = trCurrent.ru.toLowerCase();
+        if (inp === correct || (correct.includes(inp) && inp.length > 2)) {
+            res.textContent = '✓ Верно! ' + trCurrent.en + ' — ' + trCurrent.ru;
+            res.className = 'translate-result correct';
+            speak(trCurrent.en);
+            setTimeout(newTranslate, 1800);
+        } else {
+            res.textContent = '✗ Правильно: ' + trCurrent.ru;
+            res.className = 'translate-result wrong';
+        }
+    }
+
+    document.getElementById('trInput').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') checkTr();
+    });
+
+    buildList();
+    setTimeout(loadVoices, 500);
+    setTimeout(loadVoices, 1500);
+</script>
+
+</body>
+</html>
