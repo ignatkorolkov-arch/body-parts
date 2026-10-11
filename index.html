@@ -459,18 +459,31 @@
     let englishVoice = null;
     let russianVoice = null;
 
-    // === ВЫБОР ГОЛОСОВ ===
+    // === АНГЛИЙСКИЙ ГОЛОС ===
     function pickEnglishVoice() {
         const voices = window.speechSynthesis.getVoices();
         if (!voices.length) return null;
 
-        // Жёстко ищем Google в первую очередь
+        // 1. Google US English
         let v = voices.find(x => x.name === 'Google US English');
         if (v) return v;
         v = voices.find(x => x.name.includes('Google') && x.lang === 'en-US');
         if (v) return v;
 
-        const priority = ['Google UK English Female', 'Microsoft Aria', 'Microsoft Jenny', 'Microsoft Zira', 'Samantha', 'Karen', 'Daniel', 'Alex'];
+        // 2. Microsoft Natural Online (звучат как люди)
+        v = voices.find(x => x.name.includes('Aria') && x.name.includes('Natural'));
+        if (v) return v;
+        v = voices.find(x => x.name.includes('Jenny') && x.name.includes('Natural'));
+        if (v) return v;
+        v = voices.find(x => x.name.includes('Guy') && x.name.includes('Natural'));
+        if (v) return v;
+
+        // 3. Любой Microsoft Natural
+        v = voices.find(x => x.name.includes('Natural') && x.lang === 'en-US');
+        if (v) return v;
+
+        // 4. Обычные
+        const priority = ['Microsoft Zira', 'Samantha', 'Karen', 'Daniel', 'Alex'];
         for (const name of priority) {
             v = voices.find(x => x.name.includes(name));
             if (v) return v;
@@ -479,17 +492,31 @@
         return voices.find(x => x.lang === 'en-US') || voices.find(x => x.lang.startsWith('en'));
     }
 
+    // === РУССКИЙ ГОЛОС ===
     function pickRussianVoice() {
         const voices = window.speechSynthesis.getVoices();
         if (!voices.length) return null;
 
-        // Жёстко ищем Google русский
+        // 1. Google русский (Android)
         let v = voices.find(x => x.name === 'Google русский');
         if (v) return v;
         v = voices.find(x => x.name.includes('Google') && x.lang === 'ru-RU');
         if (v) return v;
 
-        const priority = ['Microsoft Svetlana', 'Microsoft Daria', 'Microsoft Irina', 'Milena', 'Yuri', 'Katya'];
+        // 2. Microsoft Svetlana Natural (ЛУЧШИЙ на Windows)
+        v = voices.find(x => x.name.includes('Svetlana') && x.name.includes('Natural'));
+        if (v) return v;
+
+        // 3. Microsoft Daria Natural
+        v = voices.find(x => x.name.includes('Daria') && x.name.includes('Natural'));
+        if (v) return v;
+
+        // 4. Любой Microsoft Natural ru-RU
+        v = voices.find(x => x.name.includes('Natural') && x.lang === 'ru-RU');
+        if (v) return v;
+
+        // 5. Обычные русские
+        const priority = ['Microsoft Svetlana', 'Microsoft Daria', 'Microsoft Irina', 'Milena', 'Yuri'];
         for (const name of priority) {
             v = voices.find(x => x.name.includes(name));
             if (v) return v;
@@ -505,12 +532,9 @@
         englishVoice = pickEnglishVoice();
         russianVoice = pickRussianVoice();
 
-        // Вывод в консоль — для проверки
-        console.log('═══ ВСЕ ГОЛОСА ═══');
-        voices.forEach(v => console.log(v.name, '|', v.lang));
         console.log('═══ ВЫБРАНО ═══');
-        console.log('EN →', englishVoice ? englishVoice.name + ' (' + englishVoice.lang + ')' : 'нет');
-        console.log('RU →', russianVoice ? russianVoice.name + ' (' + russianVoice.lang + ')' : 'нет');
+        console.log('EN →', englishVoice ? englishVoice.name : '—');
+        console.log('RU →', russianVoice ? russianVoice.name : '—');
 
         const w = document.getElementById('voiceWarning');
         if (!englishVoice || !russianVoice) w.classList.add('show');
@@ -520,7 +544,6 @@
     if ('speechSynthesis' in window) {
         loadVoices();
         window.speechSynthesis.onvoiceschanged = loadVoices;
-        // Иногда Chrome грузит голоса асинхронно
         setTimeout(loadVoices, 500);
         setTimeout(loadVoices, 1500);
     }
